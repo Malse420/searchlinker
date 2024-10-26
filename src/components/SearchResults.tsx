@@ -1,5 +1,6 @@
 import { SearchResult } from "@/lib/api";
 import { VideoCard } from "./VideoCard";
+import { Video } from "lucide-react";
 
 interface SearchResultsProps {
   results: SearchResult[];
