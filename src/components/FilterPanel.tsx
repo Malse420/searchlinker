@@ -1,5 +1,6 @@
 import { Filter } from "lucide-react";
 import { SearchFilters } from "@/lib/api";
+import { useDomains } from "@/hooks/useDomains";
 
 interface FilterPanelProps {
   filters: SearchFilters;
@@ -8,7 +9,7 @@ interface FilterPanelProps {
 
 export const FilterPanel = ({ filters, onFilterChange }: FilterPanelProps) => {
   const categories = ["All", "Short", "Long", "Live"];
-  const availableTags = ["Tutorial", "Entertainment", "Education", "Gaming"];
+  const { data: domains = [], isLoading: isLoadingDomains } = useDomains();
 
   return (
     <div className="w-full max-w-xs space-y-6 p-6 bg-white rounded-lg shadow-sm">
@@ -37,25 +38,39 @@ export const FilterPanel = ({ filters, onFilterChange }: FilterPanelProps) => {
         </div>
 
         <div>
-          <h3 className="text-sm font-medium mb-2">Content Type</h3>
-          <div className="space-y-2">
-            {availableTags.map((tag) => (
-              <label key={tag} className="flex items-center gap-2">
+          <h3 className="text-sm font-medium mb-2">Source</h3>
+          {isLoadingDomains ? (
+            <div className="animate-pulse space-y-2">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="h-6 bg-gray-200 rounded"></div>
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-2">
+              <label className="flex items-center gap-2">
                 <input
-                  type="checkbox"
-                  checked={filters.tags?.includes(tag) || false}
-                  onChange={(e) => {
-                    const newTags = e.target.checked
-                      ? [...(filters.tags || []), tag]
-                      : filters.tags?.filter((t) => t !== tag);
-                    onFilterChange({ ...filters, tags: newTags });
-                  }}
+                  type="radio"
+                  name="domain"
+                  checked={!filters.domain}
+                  onChange={() => onFilterChange({ ...filters, domain: undefined })}
                   className="text-primary focus:ring-primary"
                 />
-                <span className="text-sm">{tag}</span>
+                <span className="text-sm">All Sources</span>
               </label>
-            ))}
-          </div>
+              {domains.map((domain) => (
+                <label key={domain} className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="domain"
+                    checked={filters.domain === domain}
+                    onChange={() => onFilterChange({ ...filters, domain })}
+                    className="text-primary focus:ring-primary"
+                  />
+                  <span className="text-sm">{domain}</span>
+                </label>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
