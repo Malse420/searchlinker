@@ -7,19 +7,19 @@ interface FilterPanelProps {
 }
 
 export const FilterPanel = ({ filters, onFilterChange }: FilterPanelProps) => {
-  const categories = ["All", "Articles", "Videos", "Podcasts"];
-  const availableTags = ["Technology", "Science", "Arts", "Business"];
+  const categories = ["All", "Short", "Long", "Live"];
+  const availableTags = ["Tutorial", "Entertainment", "Education", "Gaming"];
 
   return (
     <div className="w-full max-w-xs space-y-6 p-6 bg-white rounded-lg shadow-sm">
       <div className="flex items-center gap-2 pb-4 border-b">
         <Filter size={20} className="text-primary" />
-        <h2 className="font-semibold">Filters</h2>
+        <h2 className="font-semibold">Video Filters</h2>
       </div>
 
       <div className="space-y-4">
         <div>
-          <h3 className="text-sm font-medium mb-2">Category</h3>
+          <h3 className="text-sm font-medium mb-2">Duration</h3>
           <div className="space-y-2">
             {categories.map((category) => (
               <label key={category} className="flex items-center gap-2">
@@ -37,7 +37,7 @@ export const FilterPanel = ({ filters, onFilterChange }: FilterPanelProps) => {
         </div>
 
         <div>
-          <h3 className="text-sm font-medium mb-2">Tags</h3>
+          <h3 className="text-sm font-medium mb-2">Content Type</h3>
           <div className="space-y-2">
             {availableTags.map((tag) => (
               <label key={tag} className="flex items-center gap-2">
