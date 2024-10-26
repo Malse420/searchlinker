@@ -8,7 +8,7 @@ interface FilterPanelProps {
 }
 
 export const FilterPanel = ({ filters, onFilterChange }: FilterPanelProps) => {
-  const categories = ["All", "Short", "Long", "Live"];
+  const categories = ["All", "Short", "Medium", "Long"];
   const { data: domains = [], isLoading: isLoadingDomains } = useDomains();
 
   return (
@@ -31,7 +31,12 @@ export const FilterPanel = ({ filters, onFilterChange }: FilterPanelProps) => {
                   onChange={() => onFilterChange({ ...filters, category: category === "All" ? undefined : category })}
                   className="text-primary focus:ring-primary"
                 />
-                <span className="text-sm">{category}</span>
+                <span className="text-sm">
+                  {category === "All" ? "All Durations" : 
+                   category === "Short" ? "Short (< 5 min)" :
+                   category === "Medium" ? "Medium (5-20 min)" :
+                   "Long (> 20 min)"}
+                </span>
               </label>
             ))}
           </div>
