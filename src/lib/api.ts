@@ -37,41 +37,51 @@ const parseDuration = (duration: string): number => {
 };
 
 export const searchAPI = async (query: string, filters?: SearchFilters): Promise<SearchResult[]> => {
-  const baseUrl = "http://localhost:3000/r/video/search";
-  const queryParams = new URLSearchParams({ q: query });
-  
-  if (filters?.category) {
-    queryParams.append("category", filters.category);
-  }
-  
-  if (filters?.domain) {
-    queryParams.append("domain", filters.domain);
-  }
+  try {
+    const baseUrl = "http://localhost:3000/r/video/search";
+    const queryParams = new URLSearchParams({ q: query });
+    
+    if (filters?.category) {
+      queryParams.append("category", filters.category);
+    }
+    
+    if (filters?.domain) {
+      queryParams.append("domain", filters.domain);
+    }
 
-  const response = await fetch(`${baseUrl}?${queryParams}`);
-  
-  if (!response.ok) {
-    throw new Error("Failed to fetch search results");
-  }
+    const response = await fetch(`${baseUrl}?${queryParams}`);
+    
+    if (!response.ok) {
+      throw new Error("Failed to fetch search results");
+    }
 
-  const results = await response.json();
-  
-  // Filter by duration category if specified
-  if (filters?.category && ["Short", "Medium", "Long"].includes(filters.category)) {
-    return results.filter(
-      (result: SearchResult) => getDurationCategory(result.duration) === filters.category
-    );
-  }
+    const results = await response.json();
+    
+    // Filter by duration category if specified
+    if (filters?.category && ["Short", "Medium", "Long"].includes(filters.category)) {
+      return results.filter(
+        (result: SearchResult) => getDurationCategory(result.duration) === filters.category
+      );
+    }
 
-  return results;
+    return results;
+  } catch (error) {
+    console.error('Search API Error:', error);
+    return []; // Return empty array as fallback
+  }
 };
 
 export const getDomainsAPI = async (): Promise<string[]> => {
-  const response = await fetch("http://localhost:3000/r/video/domains");
-  
-  if (!response.ok) {
-    throw new Error("Failed to fetch domains");
-  }
+  try {
+    const response = await fetch("http://localhost:3000/r/video/domains");
+    
+    if (!response.ok) {
+      throw new Error("Failed to fetch domains");
+    }
 
-  return response.json();
+    return await response.json();
+  } catch (error) {
+    console.error('Domains API Error:', error);
+    return ['youtube.com', 'vimeo.com']; // Return default domains as fallback
+  }
 };
